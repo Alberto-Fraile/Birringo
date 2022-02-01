@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserQuestTable extends Migration
+class CreateUserPubsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateUserQuestTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_quest', function (Blueprint $table) {
+        Schema::create('user_pubs', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ class CreateUserQuestTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_quest');
+        Schema::dropIfExists('user_pubs');
     }
 }

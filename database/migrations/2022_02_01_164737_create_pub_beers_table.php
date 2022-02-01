@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserPubTable extends Migration
+class CreatePubBeersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateUserPubTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_pub', function (Blueprint $table) {
+        Schema::create('pub_beers', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ class CreateUserPubTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_pub');
+        Schema::dropIfExists('pub_beers');
     }
 }
