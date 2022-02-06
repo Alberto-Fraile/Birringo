@@ -14,12 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware(['login-api-token']) -> prefix('usuarios') -> group(function(){
 
-
-Route::prefix('user')->group(function(){
-	Route::put('/register',[UsersController::class,'register']);
-	Route::post('/login',[UsersController::class,'login']);
+	Route::put('/register',[UsersController::class,'register'])->withoutMiddleware(['login-api-token']);
+	Route::post('/login',[UsersController::class,'login'])->withoutMiddleware(['login-api-token']);
+	Route::post('/recoverPass',[UsersController::class,'recoverPass'])->withoutMiddleware(['login-api-token']);
 });

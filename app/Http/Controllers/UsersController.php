@@ -5,22 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
-{
+{	//Registro usuario
     public function register(Request $req){
 
-		$respuesta = ["status" => 1, "msg" => ""];
-
-        $validator = validator::make(json_decode($req->getContent(),true
-    	), 
-        	['name' => 'required|max:55',
-        	 'email' => 'required|email|unique:App\Models\User,email|max:30',
-        	 'password' => 'required|regex:/(?=.*[a-z)(?=.*[A-Z])(?=.*[0-9]).{6,}/',
-        	 'telefono' => 'required|numeric'
-        	]);
+		$respuesta = ["status" => 1, "msg" => "", "errors" => ""];
+        $validator = validator::make(json_decode($req->getContent(),true), [
+			'name' => 'required|max:55',
+			'email' => 'required|email|unique:App\Models\User,email|max:30',
+			'password' => 'required|regex:/(?=.*[a-z)(?=.*[A-Z])(?=.*[0-9]).{6,}/',
+			'telefono' => 'required|numeric'
+		]);
 
         if ($validator->fails()){
         	$respuesta['status'] = 0;
-        	$respuesta['msg'] = $validator->errors();
+			$respuesta["msg"] = "Error";
+            $respuesta["errors"] = $validator->errors();
 
         }else {
 	        $datos = $req->getContent();
@@ -34,38 +33,35 @@ class UsersController extends Controller
 
 	        try{
 	            $user->save();
-	            $respuesta['msg'] = "Usuario guardado con id ".$user->id;
+	            $respuesta['msg'] = "Usuario guardado";
 	        }catch(\Exception $e){
 	            $respuesta['status'] = 0;
 	            $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
 	        }
-
         }
-
 	    return response()->json($respuesta);
     }
-
+	//Login usuario
     public function login(Request $req){
-		$respuesta = ["status" => 1, "msg" => ""];
+
+		$respuesta = ["status" => 1, "msg" => "", "api_token" => ""];  
 
 		$datos = $req->getContent();
 		$datos = json_decode($datos);
-    	
-    	$name = $datos->name;
-
-		$user = User::where('name', '=', $name)->first();
+    	$email = $datos->email;
+		$user = User::where('email', $email)->first();
 
 		if($user){
 			if (Hash::check($datos->password, $user->password)) {
 	            do{
 	        		$apitoken = Hash::make($user->id.now());
 
-	            }while(User::where('api_token', $apitoken)->first());
+	            } while(User::where('api_token', $apitoken)->first());
 
 	            $user->api_token = $apitoken;
 	            $user->save();
-	            $respuesta['msg'] = "Login correcto".$user->api_token;
-
+	            $respuesta['msg'] = "Login correcto";
+				$respuesta["api_token"] = $usuario -> api_token; 
 
 			}else {
 	        	$respuesta['status'] = 0;
@@ -78,4 +74,35 @@ class UsersController extends Controller
 		return response()->json($respuesta);
     }
 
+	//Recuperar Contraseña
+	public function recoverPass(Request $req){
+
+		$respuesta = ["status" => 1, "msg" => ""];
+		$datos = $req -> getContent();
+		$datos = json_decode($datos); 
+	
+		$email = $datos->email;
+		$usuario = User::where('email', $email) -> first();
+
+		if($usuario){
+			$caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+			$caracteresLenght = strlen($caracteres);
+			$longitud = 8;
+			$newPassword = "";
+			
+			for($i = 0; $i<$longitud; $i++) {
+				$newPassword .= $caracteres[rand(0, $caracteresLenght -1)];
+			}
+			$usuario->api_token = null;
+			$usuario->pass = Hash::make($newPassword);
+			$usuario -> save();
+			Mail::to($usuario->email)->send(new recoverPass($newPassword));
+			$respuesta["msg"] = "Se ha enviado una contraseña nueva a tu email";  
+
+		} else {
+			$respuesta["status"] = 0;
+			$respuesta["msg"] = "Email no encontrado";  
+		}
+		return response()->json($respuesta);  
+	}
 }
