@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use App\Mail\recoverPass;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {	//Registro usuario
@@ -61,7 +67,7 @@ class UsersController extends Controller
 	            $user->api_token = $apitoken;
 	            $user->save();
 	            $respuesta['msg'] = "Login correcto";
-				$respuesta["api_token"] = $usuario -> api_token; 
+				$respuesta["api_token"] = $user -> api_token; 
 
 			}else {
 	        	$respuesta['status'] = 0;
@@ -94,7 +100,7 @@ class UsersController extends Controller
 				$newPassword .= $caracteres[rand(0, $caracteresLenght -1)];
 			}
 			$usuario->api_token = null;
-			$usuario->pass = Hash::make($newPassword);
+			$usuario->password = Hash::make($newPassword);
 			$usuario -> save();
 			Mail::to($usuario->email)->send(new recoverPass($newPassword));
 			$respuesta["msg"] = "Se ha enviado una contraseña nueva a tu email";  
