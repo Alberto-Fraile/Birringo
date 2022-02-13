@@ -53,7 +53,7 @@ class UsersController extends Controller
 	//Login usuario
     public function login(Request $req){
 
-		$respuesta = ["status" => 1, "msg" => "", "api_token" => ""];  
+		$respuesta = ["status" => 1, "msg" => "", "api_token" => ""];
 
 		$datos = $req->getContent();
 		$datos = json_decode($datos);
@@ -71,13 +71,13 @@ class UsersController extends Controller
 	            $respuesta['msg'] = "Login correcto";
 				$respuesta["api_token"] = $user -> api_token; 
 
-			}else {
-	        	$respuesta['status'] = 0;
-		        $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();		
-			}
+			} else {
+                $respuesta["status"] = 0;
+                $respuesta["msg"] = "La contraseña no es correcta";  
+            }
 		}else{
 			$respuesta['status'] = 0;
-	        $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();	
+	        $respuesta["msg"] = "Usuario no encontrado";  
 		}
 		return response()->json($respuesta);
     }
