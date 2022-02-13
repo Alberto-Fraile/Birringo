@@ -14,19 +14,17 @@ class UsersController extends Controller
 {	//Registro usuario
     public function register(Request $req){
 
-		$respuesta = ["status" => 1, "msg" => "", "errors" => ""];
+		$respuesta = ["status" => 1, "msg" => "", "api_token" => ""];
         $validator = validator::make(json_decode($req->getContent(),true), [
 			'name' => 'required|max:55',
 			'email' => 'required|email|unique:App\Models\User,email|max:30',
 			'password' => 'required|regex:/(?=.*[a-z)(?=.*[A-Z])(?=.*[0-9]).{6,}/',
-			'telefono' => 'required|numeric'
+			'telefono' => 'nullable|numeric'
 		]);
 
         if ($validator->fails()){
         	$respuesta['status'] = 0;
-			$respuesta["msg"] = "Error";
-            $respuesta["errors"] = $validator->errors();
-
+			$respuesta["msg"] = "".$validator->errors();
         }else {
 	        $datos = $req->getContent();
 	        $datos = json_decode($datos);
@@ -36,10 +34,15 @@ class UsersController extends Controller
 	        $user->email = $datos->email;
 	        $user->password = Hash::make($datos->password);
 	        $user->telefono = $datos->telefono;
-
+			do {
+				$token = Hash::make($user->id.now());
+			} while(User::where('api_token', $token) -> first());
+			
 	        try{
+				$user -> api_token = $token;
 	            $user->save();
-	            $respuesta['msg'] = "Usuario guardado";
+	            $respuesta['msg'] = "Registro completado";
+				$respuesta["api_token"] = $user -> api_token; 
 	        }catch(\Exception $e){
 	            $respuesta['status'] = 0;
 	            $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
@@ -61,7 +64,6 @@ class UsersController extends Controller
 			if (Hash::check($datos->password, $user->password)) {
 	            do{
 	        		$apitoken = Hash::make($user->id.now());
-
 	            } while(User::where('api_token', $apitoken)->first());
 
 	            $user->api_token = $apitoken;
