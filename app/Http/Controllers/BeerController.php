@@ -46,7 +46,7 @@ class BeerController extends Controller
         $validator = Validator::make(json_decode($request->
         getContent(),true), [
             "titulo" => 'required|max:50',
-            "ml" => 'required|max:10',
+            "graduacion" => 'required|max:10',
             "tipo" => 'required|max:100',
             "imagen" => 'nullable|max:250',
             "imagen2" => 'nullable|max:250',
@@ -65,7 +65,7 @@ class BeerController extends Controller
               
             $beer = new Beer();
             $beer -> titulo = $datos->titulo;
-            $beer -> ml = $datos->ml;
+            $beer -> graduacion = $datos->graduacion;
             $beer -> tipo = $datos->tipo;
             $beer -> descripcion = $datos->descripcion;
 
