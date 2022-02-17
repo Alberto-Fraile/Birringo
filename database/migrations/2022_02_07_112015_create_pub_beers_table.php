@@ -14,7 +14,11 @@ class CreatePubBeersTable extends Migration
     public function up()
     {
         Schema::create('pub_beers', function (Blueprint $table) {
-            $table->id();
+            $table->id('id');
+            $table->unsignedBigInteger('beer_id');
+            $table->unsignedBigInteger('pub_id');
+            $table->foreign('beer_id')->references('id')->on('beers');
+            $table->foreign('pub_id')->references('id')->on('pubs');
             $table->timestamps();
         });
     }

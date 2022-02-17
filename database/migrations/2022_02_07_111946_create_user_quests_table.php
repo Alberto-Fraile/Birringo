@@ -14,7 +14,11 @@ class CreateUserQuestsTable extends Migration
     public function up()
     {
         Schema::create('user_quests', function (Blueprint $table) {
-            $table->id();
+            $table->id('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('quest_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('quest_id')->references('id')->on('quests');
             $table->timestamps();
         });
     }

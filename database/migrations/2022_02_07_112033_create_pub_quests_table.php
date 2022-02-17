@@ -14,7 +14,8 @@ class CreatePubQuestsTable extends Migration
     public function up()
     {
         Schema::create('pub_quests', function (Blueprint $table) {
-            $table->id();
+            $table->id('id');
+            //Un quest se completa solo en un bar o puede completarse en distinto?
             $table->timestamps();
         });
     }

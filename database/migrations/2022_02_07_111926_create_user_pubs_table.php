@@ -14,7 +14,9 @@ class CreateUserPubsTable extends Migration
     public function up()
     {
         Schema::create('user_pubs', function (Blueprint $table) {
-            $table->id();
+            $table->id('id');
+            //Solo lo veo necesario si un usuario quiere añadir un pub a favoritos y no lo tenemos organizado asi en la app, 
+            //habria que añadir y diseñar mas pantallas por lo que lo veo como opcion mas adelante en todo caso.
             $table->timestamps();
         });
     }

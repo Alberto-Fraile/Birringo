@@ -14,8 +14,11 @@ class CreatePubsTable extends Migration
     public function up()
     {
         Schema::create('pubs', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id('id');
+            $table->string('titulo', 50);
+            $table->string('calle', 100);
+            $table->double('latitud');
+            $table->double('longitud');
         });
     }
 

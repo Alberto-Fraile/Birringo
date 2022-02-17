@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Quest extends Model
 {
     use HasFactory;
+    protected $table = 'quests';
+
+    public function users(){
+        return $this->belongsToMany(User::class,'user_quests');
+    }
+    public function pub(){
+        return $this->belongsTo(Pub::class);
+    }
 }

@@ -14,7 +14,11 @@ class CreateUserBeersTable extends Migration
     public function up()
     {
         Schema::create('user_beers', function (Blueprint $table) {
-            $table->id();
+            $table->id('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('beer_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('beer_id')->references('id')->on('beers');
             $table->timestamps();
         });
     }

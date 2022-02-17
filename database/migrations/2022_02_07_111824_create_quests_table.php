@@ -14,7 +14,11 @@ class CreateQuestsTable extends Migration
     public function up()
     {
         Schema::create('quests', function (Blueprint $table) {
-            $table->id();
+            $table->id('id');
+            $table->string('titulo', 50);
+            $table->integer('puntos');
+            $table->unsignedBigInteger('pub_asociado');
+            $table->foreign('pub_asociado')->references('id')->on('pubs');
             $table->timestamps();
         });
     }
