@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Beer;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -113,4 +116,155 @@ class UsersController extends Controller
 		}
 		return response()->json($respuesta);  
 	}
+	//Ver perfil de usuario logueado, se necesita api token.
+	public function getUserProfile(Request $request){
+
+        $respuesta = ["status" => 1, "msg" => ""];
+        $perfil = $usuario = User::find($request->usuario->id);
+
+        if($perfil){
+            $perfil -> makevisible( 'password');
+            $respuesta['msg'] = "Datos obtenidos";
+            $respuesta['datos_perfil'] = $perfil;
+        } else {
+            $respuesta["status"] = 0;
+            $respuesta["msg"] = "Se ha producido un error";  
+        }
+        return response()->json($respuesta);
+    }
+
+	//Un usuario podra subir una foto de perfil, se necesita api token.
+    public function uploadProfileImage(Request $req){
+        $respuesta = ["status" => 1, "msg" => ""];
+
+        $datos = $req -> getContent();
+        $datos = json_decode($datos); 
+        $usuario = $usuario = User::where('id', $req->usuario->id) -> first();
+        $image = $datos->image;  // image base64 encoded
+
+        if($image && $usuario){
+            $image = str_replace('data:image/jpeg;base64,', '', $image);
+            $image = str_replace(' ', '+', $image);
+            $imageName = Str::random(10).'.'.'png';
+
+            try {
+                Storage::disk('public')->put($imageName, base64_decode($image));
+                $imageUrl = "http://localhost/Birringo/public/storage/".$imageName;
+                $usuario->imagen = $imageUrl;
+                $usuario -> save();        
+                $respuesta["msg"] = "Imagen guardada";        
+            } 
+            catch (\Exception $e) {
+                $respuesta["status"] = 0;
+                $respuesta["msg"] = "Se ha producido un error al guardar la imagen";  
+            }
+
+        } else {
+            $respuesta["status"] = 0;
+            $respuesta["msg"] = "Imagen o usuario no encontrado";  
+        }
+
+        return response()->json($respuesta);  
+    }
+
+	//Ver listado de ranking top 20, se necesita api token.
+	public function getRanking(Request $request){
+		$respuesta = ["status" => 1, "msg" => ""];
+
+		try {
+			$ranking = DB::table('users')->take(20)
+			->orderBy('puntos','DESC')
+			->get();
+            $respuesta['ranking'] = $ranking;
+
+        }catch (\Exception $e) {
+            $respuesta["status"] = 0;
+            $respuesta["msg"] = "Se ha producido un error".$e->getMessage();  
+        }
+
+		return response()->json($respuesta);
+	}
+	//Obtener poisicion del usuario en el ranking para mostrarsela al usuario.
+	public function getUserPositionRanking(Request $request){
+		$respuesta = ["status" => 1, "msg" => ""];
+
+		try {
+			$ranking = DB::table('users')
+			->orderBy('puntos','DESC')
+			->get()->toArray();
+			$userPosition = array_search($request->usuario->id, array_column($ranking, 'id'));
+
+			$perfil = User::find($request->usuario->id);
+			if ($perfil && $userPosition){
+				$perfil->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
+				$respuesta['posicion'] = $userPosition;
+				$respuesta['datos'] = $perfil;
+			} else {
+				$respuesta["status"] = 0;
+				$respuesta["msg"] = "No se ha encontrado al usuario";  
+			}
+		
+        }catch (\Exception $e) {
+            $respuesta["status"] = 0;
+            $respuesta["msg"] = "Se ha producido un error".$e->getMessage();  
+        }
+
+		return response()->json($respuesta);
+	}
+
+	//Añadir cerveza a favoritos.
+	public function addBeerToFavourites(Request $request){
+		$respuesta = ["status" => 1, "msg" => ""];
+
+		$datos = $request -> getContent();
+        $datos = json_decode($datos); 
+
+		$usuario = User::find($request->usuario->id);
+		$beer = Beer::find($datos->beerID);
+
+		if ($usuario && $beer){
+			//Con el syncWithoutDetaching evitamos que se añada una cerveza a favoritos numerosas veces, si ya esta 
+			//favoritos no se añadira otra vez.
+			$usuario->beers()->syncWithoutDetaching($beer);
+			$respuesta["msg"] = "Cerveza añadida a favoritos";
+
+		} else {
+			$respuesta["status"] = 0;
+			$respuesta['msg'] = "Cerveza o usuario no encontrado";
+		}
+
+		return response()->json($respuesta);
+	}
+
+	//Ver cervezas favoritas del usuario logueado.
+	public function getFavouritesBeersFromUser(Request $request){
+
+		$respuesta = ["status" => 1, "msg" => ""];
+		$usuario = User::find($request->usuario->id);
+
+		if ($usuario){  
+			$usuario -> beers; 
+
+			try {
+				if (!$usuario -> beers -> isEmpty()){
+                    $respuesta['beers'] = $usuario -> beers;
+					$respuesta["msg"] = "Listado obtenido";
+				}
+				else{
+                    $respuesta["msg"] = "El usuario no tiene cervezas favoritas";
+				}
+			}catch (\Exception $e) {
+				$respuesta["status"] = 0;
+				$respuesta["msg"] = "Se ha producido un error".$e->getMessage();  
+			}
+		} else {
+			$respuesta["status"] = 0;
+			$respuesta['msg'] = "Usuario no encontrado";
+		}
+
+        return response()->json($respuesta);
+	}
+	
+
+
 }

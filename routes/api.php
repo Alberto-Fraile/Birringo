@@ -23,5 +23,10 @@ Route::middleware(['login-api-token']) -> prefix('usuarios') -> group(function()
 	Route::post('/recoverPass',[UsersController::class,'recoverPass'])->withoutMiddleware(['login-api-token']);
 	Route::get('/obtenerCervezas',[BeerController::class,'obtenerCervezas']);
 	Route::put('/altaBeer',[BeerController::class,'altaBeer'])->withoutMiddleware(['login-api-token']);
-
+	Route::get('/getUserProfile',[UsersController::class,'getUserProfile']);
+	Route::post('/uploadProfileImage',[UsersController::class,'uploadProfileImage']);
+	Route::get('/getRanking',[UsersController::class,'getRanking']);
+	Route::get('/getUserPositionRanking',[UsersController::class,'getUserPositionRanking']);
+	Route::post('/addBeerToFavourites',[UsersController::class,'addBeerToFavourites']);
+	Route::get('/getFavouritesBeersFromUser',[UsersController::class,'getFavouritesBeersFromUser']);
 });
