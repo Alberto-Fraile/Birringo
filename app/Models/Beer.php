@@ -11,7 +11,6 @@ class Beer extends Model
     protected $table = 'beers';
     public $timestamps = false;
 
-
     protected $hidden = [
         'created_at',
         'updated_at',
