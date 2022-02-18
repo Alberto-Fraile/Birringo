@@ -29,4 +29,5 @@ Route::middleware(['login-api-token']) -> prefix('usuarios') -> group(function()
 	Route::get('/getUserPositionRanking',[UsersController::class,'getUserPositionRanking']);
 	Route::post('/addBeerToFavourites',[UsersController::class,'addBeerToFavourites']);
 	Route::get('/getFavouritesBeersFromUser',[UsersController::class,'getFavouritesBeersFromUser']);
+	Route::get('/obtenerCervezasTiposMain',[BeerController::class,'obtenerCervezasTiposMain']);
 });

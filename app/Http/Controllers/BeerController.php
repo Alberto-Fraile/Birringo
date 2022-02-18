@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class BeerController extends Controller
 {
-    //Obtener Listado Cervezas
+    //Obtener Listado Cervezas se le pasa un json con solo busqueda y el nombre.
     public function obtenerCervezas(Request $req){
 
         $respuesta = ["status" => 1, "msg" => ""];
@@ -27,6 +27,51 @@ class BeerController extends Controller
             } else {
                 $beers = Beer::with('pubs')
                 ->get();  
+            }
+            $respuesta['msg'] = "Cervezas encontradas";
+            $respuesta['beers'] = $beers;
+
+        }catch (\Exception $e) {
+            $respuesta["status"] = 0;
+            $respuesta["msg"] = "Se ha producido un error".$e->getMessage();  
+        }
+        return response()->json($respuesta);
+    }
+
+    //Obtener Listado Cervezas por tipo que se mostraran en el home.
+    public function obtenerCervezasTiposMain(Request $req){
+
+        $respuesta = ["status" => 1, "msg" => ""];
+    
+        try {
+            if($req -> has('tipo') &&  $req -> input('tipo') == "Rubia"){
+                $beers = Beer::with('pubs')
+                ->where('beers.tipo','like','%'. "Rubia".'%')
+                ->get();
+           
+            } else if($req -> has('tipo') &&  $req -> input('tipo') == "Lager"){
+                $beers = Beer::with('pubs')
+                ->where('beers.tipo','like','%'. "Lager".'%')
+                ->get();
+           
+            } else if($req -> has('tipo') &&  $req -> input('tipo') == "Ale"){
+                $beers = Beer::with('pubs')
+                ->where('beers.tipo','like','%'. "Ale".'%')
+                ->get();
+           
+            } else if($req -> has('tipo') &&  $req -> input('tipo') == "IPA"){
+                $beers = Beer::with('pubs')
+                ->where('beers.tipo','like','%'. "IPA".'%')
+                ->get();
+           
+            } else if($req -> has('tipo') &&  $req -> input('tipo') == "Rellenar"){
+                $beers = Beer::with('pubs')
+                ->where('beers.tipo','like','%'. "Rellenar".'%')
+                ->get();
+           
+            } else {
+                $respuesta["status"] = 0;
+                $respuesta["msg"] = "No se ha encontrado ningun tipo";
             }
             $respuesta['msg'] = "Cervezas encontradas";
             $respuesta['beers'] = $beers;
