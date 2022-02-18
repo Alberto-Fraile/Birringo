@@ -149,7 +149,7 @@ class UsersController extends Controller
 
             try {
                 Storage::disk('public')->put($imageName, base64_decode($image));
-                $imageUrl = "http://localhost/Birringo/public/storage/".$imageName;
+                $imageUrl = "http://birringoapi.jonacedev.com/Birringo/public/storage/".$imageName;
                 $usuario->imagen = $imageUrl;
                 $usuario -> save();        
                 $respuesta["msg"] = "Imagen guardada";        
