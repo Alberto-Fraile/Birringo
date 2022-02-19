@@ -22,6 +22,7 @@ class Pub extends Model
     protected $hidden = [
         'created_at',
         'updated_at',
+        'pivot',
     ];
 
     public function beers(){
