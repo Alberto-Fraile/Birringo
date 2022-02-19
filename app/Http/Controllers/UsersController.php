@@ -123,7 +123,7 @@ class UsersController extends Controller
         $perfil = $usuario = User::find($request->usuario->id);
 
         if($perfil){
-            $perfil -> makevisible( 'password');
+            //$perfil -> makeHidden( 'password');
             $respuesta['msg'] = "Datos obtenidos";
             $respuesta['datos_perfil'] = $perfil;
         } else {
