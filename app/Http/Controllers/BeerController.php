@@ -27,6 +27,7 @@ class BeerController extends Controller
             } else {
                 $beers = Beer::with('pubs')
                 ->get();  
+                //Comentario
             }
             $respuesta['msg'] = "Cervezas encontradas";
             $respuesta['beers'] = $beers;
