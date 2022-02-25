@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\BeerController;
+use App\Http\Controllers\PubsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,5 @@ Route::middleware(['login-api-token']) -> prefix('usuarios') -> group(function()
 	Route::post('/addBeerToFavourites',[UsersController::class,'addBeerToFavourites']);
 	Route::get('/getFavouritesBeersFromUser',[UsersController::class,'getFavouritesBeersFromUser']);
 	Route::get('/obtenerCervezasTiposMain',[BeerController::class,'obtenerCervezasTiposMain']);
+	Route::get('/getPubs',[PubsController::class,'getPubs']);
 });
