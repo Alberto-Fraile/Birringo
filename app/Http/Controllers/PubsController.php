@@ -20,7 +20,7 @@ class PubsController extends Controller
 
             $pubs = Pub::get();  
             if ($pubs){
-                $respuesta['msg'] = "Pubs encontradas";
+                $respuesta['msg'] = "Pubs encontrados";
                 $respuesta['pubs'] = $pubs;
             } else {
                 $respuesta["status"] = 0;
