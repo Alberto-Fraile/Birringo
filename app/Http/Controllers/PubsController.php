@@ -36,4 +36,33 @@ class PubsController extends Controller
         }
         return response()->json($respuesta);
     }
+
+    public function getPubsByName(Request $req){
+
+        $respuesta = ["status" => 1, "msg" => ""];
+        
+        try {
+            //Ver pubs por titulo o tipo
+            if($req -> has('busqueda')){
+                $pubs = DB::table('pubs')
+               ->where('pubs.titulo','like','%'. $req -> input('busqueda').'%')
+               ->get();
+               if($beers){
+                    $respuesta['msg'] = "Pubs encontrados";
+                    $respuesta['pubs'] = $pubs;
+               } else {
+                    $respuesta["status"] = 0;
+                    $respuesta["msg"] = "Se ha producido un error";  
+               }
+            } else {
+                $respuesta["status"] = 0;
+                $respuesta["msg"] = "Se ha producido un error";  
+            }
+       
+        }catch (\Exception $e) {
+            $respuesta["status"] = 0;
+            $respuesta["msg"] = "Se ha producido un error".$e->getMessage();  
+        }
+        return response()->json($respuesta);
+    }
 }
