@@ -47,7 +47,7 @@ class PubsController extends Controller
                 $pubs = DB::table('pubs')
                ->where('pubs.titulo','like','%'. $req -> input('busqueda').'%')
                ->get();
-               if($beers){
+               if($pubs){
                     $respuesta['msg'] = "Pubs encontrados";
                     $respuesta['pubs'] = $pubs;
                } else {
