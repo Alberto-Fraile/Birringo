@@ -14,9 +14,6 @@ class Quest extends Model
         return $this->belongsToMany(User::class,'user_quests');
     }
     public function pub(){
-        return $this->hasOneThrough(
-            Pub::class,
-            Quest::class
-        );
+        return $this->belongsToMany(Pub::class);
     }
 }
