@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\BeerController;
 use App\Http\Controllers\PubsController;
+use App\Http\Controllers\QuestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,5 +34,5 @@ Route::middleware(['login-api-token']) -> prefix('usuarios') -> group(function()
 	Route::get('/obtenerCervezasTiposMain',[BeerController::class,'obtenerCervezasTiposMain']);
 	Route::get('/getPubs',[PubsController::class,'getPubs']);
 	Route::get('/getPubsByName',[PubsController::class,'getPubsByName']);
-	Route::get('/getQuests',[PubsController::class,'getQuests']);
+	Route::get('/getQuests',[QuestController::class,'getQuests']);
 });
