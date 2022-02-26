@@ -6,5 +6,25 @@ use Illuminate\Http\Request;
 
 class QuestController extends Controller
 {
-    //
+    public function getQuests(){
+
+        $respuesta = ["status" => 1, "msg" => ""];
+
+        try {
+            $quests = Quest::get();  
+
+            if ($quests){
+                $respuesta['msg'] = "Quests encontrados";
+                $respuesta['quests'] = $quests;
+            } else {
+                $respuesta["status"] = 0;
+                $respuesta['msg'] = "No se han podido obtener los bares";
+            }
+
+        }catch (\Exception $e) {
+            $respuesta["status"] = 0;
+            $respuesta["msg"] = "Se ha producido un error".$e->getMessage();  
+        }
+        return response()->json($respuesta);
+    }
 }

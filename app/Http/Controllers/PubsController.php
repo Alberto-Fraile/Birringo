@@ -17,8 +17,8 @@ class PubsController extends Controller
         $respuesta = ["status" => 1, "msg" => ""];
         
         try {
-
             $pubs = Pub::get();  
+
             if ($pubs){
                 $respuesta['msg'] = "Pubs encontrados";
                 $respuesta['pubs'] = $pubs;
@@ -26,10 +26,6 @@ class PubsController extends Controller
                 $respuesta["status"] = 0;
                 $respuesta['msg'] = "No se han podido obtener los bares";
             }
-
-            $respuesta['msg'] = "Cervezas encontradas";
-            $respuesta['pubs'] = $pubs;
-
         }catch (\Exception $e) {
             $respuesta["status"] = 0;
             $respuesta["msg"] = "Se ha producido un error".$e->getMessage();  
