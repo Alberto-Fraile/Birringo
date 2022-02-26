@@ -11,7 +11,7 @@ class QuestController extends Controller
         $respuesta = ["status" => 1, "msg" => ""];
 
         try {
-            $quests = Quest::get();  
+            $quests = Quest::with('pub');
 
             if ($quests){
                 $respuesta['msg'] = "Quests encontrados";
