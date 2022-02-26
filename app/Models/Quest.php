@@ -14,6 +14,11 @@ class Quest extends Model
         return $this->belongsToMany(User::class,'user_quests');
     }
     public function pub(){
-        return $this->belongsTo(Pub::class, 'id');
+        return $this->hasOneThrough(
+            Pub::class,
+            Quest::class,
+            'pub_asociado', // Foreign key on the owners table...
+            'id' // Local key on the cars table...
+        );
     }
 }
