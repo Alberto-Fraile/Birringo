@@ -16,9 +16,7 @@ class Quest extends Model
     public function pub(){
         return $this->hasOneThrough(
             Pub::class,
-            Quest::class,
-            'pub_asociado', // Foreign key on the owners table...
-            'id' // Local key on the cars table...
+            Quest::class
         );
     }
 }
