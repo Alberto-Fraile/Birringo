@@ -17,7 +17,6 @@ class PubsController extends Controller
         $respuesta = ["status" => 1, "msg" => ""];
         
         try {
-
             $pubs = Pub::get();  
             if ($pubs){
                 $respuesta['msg'] = "Pubs encontrados";
