@@ -29,6 +29,6 @@ class Pub extends Model
         return $this->belongsToMany(Beer::class,'pub_beers');
     }
     public function quests(){
-        return $this -> hasMany(Quest::class, 'pub_asociado');
+        return $this -> belongsTo(Quest::class, 'pub_asociado');
     }
 }
