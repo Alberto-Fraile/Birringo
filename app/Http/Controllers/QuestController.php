@@ -18,8 +18,10 @@ class QuestController extends Controller
         $respuesta = ["status" => 1, "msg" => ""];
 
         try {
-            $quests = Quest::with('pub')->get();
-
+            $quests = DB::table('quests')
+            ->join('pubs', 'pubs.id', '=', 'quests.pub_asociado')
+            ->get();
+            
             if ($quests){
                 $respuesta['msg'] = "Quests encontrados";
                 $respuesta['quests'] = $quests;
