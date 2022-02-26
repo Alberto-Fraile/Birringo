@@ -14,6 +14,6 @@ class Quest extends Model
         return $this->belongsToMany(User::class,'user_quests');
     }
     public function pub(){
-        return $this->belongsTo(Pub::class, 'id');
+        return $this->hasOne(Pub::class, 'id');
     }
 }
