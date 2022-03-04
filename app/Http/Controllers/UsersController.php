@@ -274,7 +274,6 @@ class UsersController extends Controller
         getContent(),true), [
             "name" => 'max:50',
             "email" => 'email|unique:App\Models\User,email|max:30',
-            "telefono" => 'numeric',
         ]);
 
             if($validator -> fails()){
