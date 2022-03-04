@@ -37,9 +37,9 @@ class UsersController extends Controller
 	        $user->email = $datos->email;
 	        $user->password = Hash::make($datos->password);
 
-			if(isset($datos->telefono))
+			if(isset($datos->telefono) && $datos->telefono != 0)
 	        $user->telefono = $datos->telefono;
-			
+
 			do {
 				$token = Hash::make($user->id.now());
 			} while(User::where('api_token', $token) -> first());
