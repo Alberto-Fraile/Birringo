@@ -264,6 +264,57 @@ class UsersController extends Controller
 
         return response()->json($respuesta);
 	}
+
+	function editUserData(Request $request){
+
+		$respuesta = ["status" => 1, "msg" => ""];
+
+        $usuario = User::find($request->usuario->id);
+        $validator = Validator::make(json_decode($request->
+        getContent(),true), [
+            "name" => 'max:50',
+            "email" => 'email|unique:App\Models\User,email|max:30',
+            "telefono" => 'numeric',
+        ]);
+
+            if($validator -> fails()){
+                $respuesta["status"] = 0;
+                $respuesta["msg"] = "".$validator->errors();  
+            } else {
+
+				if ($usuario){
+		
+					$datos = $request -> getContent();
+					$datos = json_decode($datos); 
+				
+					if(isset($datos->name))
+					$usuario -> name = $datos->name;
+					if(isset($datos->email))
+					$usuario -> email = $datos->email;
+					if(isset($datos->telefono))
+					$usuario -> telefono = $datos->telefono;
+				
+					/*if(isset($datos->biografia))
+					$usuario -> biografia = $datos->biografia;*/
+		
+					try {
+						$usuario->save();
+						$respuesta["msg"] = "Cambios realizados";
+					}catch (\Exception $e) {
+						$respuesta["status"] = 0;
+						$respuesta["msg"] = "Se ha producido un error".$e->getMessage();  
+					}
+						
+				} else {
+					$respuesta["msg"] = "Usuario no encontrado"; 
+					$respuesta["status"] = 0;
+				} 
+			} 
+			
+
+        return response()->json($respuesta); 
+
+	}
 	
 
 
