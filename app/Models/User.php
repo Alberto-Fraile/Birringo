@@ -33,8 +33,6 @@ class User extends Authenticatable
         'telefono',
     ];
 
-    protected $guarded = [];
-
 
 
     /**
