@@ -273,7 +273,8 @@ class UsersController extends Controller
         $validator = Validator::make(json_decode($request->
         getContent(),true), [
             "name" => 'max:50',
-            "email" => 'email|unique:App\Models\User,email|max:30',
+            "email" => 'email|max:30',
+			"biografia" => 'max:150',
         ]);
 
             if($validator -> fails()){
