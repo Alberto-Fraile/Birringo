@@ -35,4 +35,5 @@ Route::middleware(['login-api-token']) -> prefix('usuarios') -> group(function()
 	Route::get('/getPubs',[PubsController::class,'getPubs']);
 	Route::get('/getPubsByName',[PubsController::class,'getPubsByName']);
 	Route::get('/getQuests',[QuestController::class,'getQuests']);
+	Route::post('/editUserData',[UsersController::class,'editUserData']);
 });
