@@ -196,8 +196,8 @@ class UsersController extends Controller
 			->orderBy('puntos','DESC')
 			->get()->toArray();
 			$userPosition = array_search($request->usuario->id, array_column($ranking, 'id'));
-
 			$perfil = User::find($request->usuario->id);
+			
 			if ($perfil && $userPosition){
 				$perfil->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
 				$respuesta['posicion'] = $userPosition;
