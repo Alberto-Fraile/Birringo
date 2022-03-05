@@ -68,12 +68,14 @@ class UsersController extends Controller
 
 		if($user){
 			if (Hash::check($datos->password, $user->password)) {
-	            do{
-	        		$apitoken = Hash::make($user->id.now());
-	            } while(User::where('api_token', $apitoken)->first());
 
-	            $user->api_token = $apitoken;
-	            $user->save();
+				if (!isset($user->api_token)) {
+                    do {
+                        $token = Hash::make($user->id.now());
+                    } while(User::where('api_token', $token) -> first());
+                    $user -> api_token = $token;
+                    $user -> save();
+                } 
 	            $respuesta['msg'] = "Login correcto";
 				$respuesta["api_token"] = $user -> api_token; 
 
