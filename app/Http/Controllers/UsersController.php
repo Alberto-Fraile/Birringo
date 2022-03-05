@@ -201,7 +201,7 @@ class UsersController extends Controller
 			if ($perfil || $userPosition){
 				$perfil->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
 				$respuesta['posicion'] = $userPosition;
-				$respuesta['datos'] = $perfil;
+				$respuesta['datos_perfil'] = $perfil;
 			} else {
 				$respuesta["status"] = 0;
 				$respuesta["msg"] = "No se ha encontrado al usuario";  
