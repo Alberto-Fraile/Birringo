@@ -277,7 +277,7 @@ class UsersController extends Controller
         getContent(),true), [
             "name" => 'max:50',
             "email" => 'email|max:30',
-			"biografia" => 'max:150',
+			"biografia" => 'max:120',
         ]);
 
             if($validator -> fails()){
