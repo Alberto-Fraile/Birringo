@@ -296,9 +296,8 @@ class UsersController extends Controller
 					$usuario -> email = $datos->email;
 					if(isset($datos->telefono))
 					$usuario -> telefono = $datos->telefono;
-				
-					/*if(isset($datos->biografia))
-					$usuario -> biografia = $datos->biografia;*/
+					if(isset($datos->biografia))
+					$usuario -> biografia = $datos->biografia;
 		
 					try {
 						$usuario->save();
