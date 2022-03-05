@@ -191,6 +191,7 @@ class UsersController extends Controller
 	public function getUserPositionRanking(Request $request){
 		$respuesta = ["status" => 1, "msg" => ""];
 
+
 		try {
 			$ranking = DB::table('users')
 			->orderBy('puntos','DESC')
@@ -200,7 +201,7 @@ class UsersController extends Controller
 
 			if ($perfil || $userPosition){
 				$perfil->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
-				$respuesta['posicion'] = $userPosition + 1;
+				$respuesta['posicion'] = $userPosition++;
 				$respuesta['datos_perfil'] = $perfil;
 			} else {
 				$respuesta["status"] = 0;
