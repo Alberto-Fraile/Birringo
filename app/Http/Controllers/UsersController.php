@@ -197,8 +197,8 @@ class UsersController extends Controller
 			->get()->toArray();
 			$userPosition = array_search($request->usuario->id, array_column($ranking, 'id'));
 			$perfil = User::find($request->usuario->id);
-			
-			if ($perfil && $userPosition){
+
+			if ($perfil || $userPosition){
 				$perfil->makeHidden(['created_at', 'updated_at', 'email_verified_at']);
 				$respuesta['posicion'] = $userPosition;
 				$respuesta['datos'] = $perfil;
