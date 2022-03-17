@@ -250,10 +250,18 @@ class UsersController extends Controller
 
 		if ($usuario){  
 			$usuario -> beers; 
-
 			try {
 				if (!$usuario -> beers -> isEmpty()){
-                    $respuesta['beers'] = $usuario -> beers;
+					$beers = Beer::with('pubs')
+						 ->join('user_beers','beers.id','user_beers.beer_id')
+                     	 ->get();
+					$pubs = DB::table('pub_beers')
+						->join('pubs','pub_beers.pub_id','pubs.id')
+						->get();
+
+					//$favBeers = array_merge($usuario -> beers, ['pubs' => $pubs]);
+
+                    $respuesta['beers'] = $beers;
 					$respuesta["msg"] = "Listado obtenido";
 				}
 				else{
