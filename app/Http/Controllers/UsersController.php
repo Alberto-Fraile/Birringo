@@ -193,7 +193,6 @@ class UsersController extends Controller
 	public function getUserPositionRanking(Request $request){
 		$respuesta = ["status" => 1, "msg" => ""];
 
-
 		try {
 			$ranking = DB::table('users')
 			->orderBy('puntos','DESC')
@@ -254,12 +253,13 @@ class UsersController extends Controller
 				if (!$usuario -> beers -> isEmpty()){
 					$favBeers = Beer::with('pubs')
 						 ->join('user_beers','beers.id','user_beers.beer_id')
-						 ->where('user_beers.user_id', $$usuario->id)
+						 ->where('user_beers.user_id', $usuario->id)
                      	 ->get();
                     $respuesta['beers'] = $favBeers;
 					$respuesta["msg"] = "Listado obtenido";
 				}
 				else{
+					$respuesta["status"] = 0;
                     $respuesta["msg"] = "El usuario no tiene cervezas favoritas";
 				}
 			}catch (\Exception $e) {
