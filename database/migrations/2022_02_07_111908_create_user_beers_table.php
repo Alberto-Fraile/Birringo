@@ -15,6 +15,7 @@ class CreateUserBeersTable extends Migration
     {
         Schema::create('user_beers', function (Blueprint $table) {
             $table->id('id');
+            $table->boolean('isFav')->default(1)->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('beer_id');
             $table->foreign('user_id')->references('id')->on('users');

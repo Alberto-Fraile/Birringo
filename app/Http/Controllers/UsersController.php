@@ -248,7 +248,6 @@ class UsersController extends Controller
 		$usuario = User::find($request->usuario->id);
 
 		if ($usuario){  
-			$usuario -> beers; 
 			try {
 				if (!$usuario -> beers -> isEmpty()){
 					$favBeers = Beer::with('pubs')
