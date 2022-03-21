@@ -17,6 +17,7 @@ class CreateQuestsTable extends Migration
             $table->id('id');
             $table->string('titulo', 50);
             $table->integer('puntos');
+            $table->string('code', 50);
             $table->unsignedBigInteger('pub_asociado');
             $table->foreign('pub_asociado')->references('id')->on('pubs');
             $table->timestamps();
