@@ -20,8 +20,10 @@ class BeerController extends Controller
         
         if($usuario){
             try {
+
+            
                 //Ver cervezas por titulo o tipo
-                if($req -> has('busqueda')){
+                if($req -> has('busqueda') && $req -> input('busqueda') != "" ){
 
                     $beers = Beer::with('pubs')
                     ->where('beers.titulo','like','%'. $req -> input('busqueda').'%')
@@ -34,7 +36,8 @@ class BeerController extends Controller
                     ->get();
 
                 //Ver todas las cervezas.
-                } else {
+                } 
+                else {
                     $beers = Beer::with('pubs')
                             ->leftJoin('user_beers','user_beers.beer_id', 'beers.id')
                             ->where('user_beers.user_id', $usuario->id)
