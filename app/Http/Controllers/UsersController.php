@@ -253,7 +253,6 @@ class UsersController extends Controller
 					$favBeers = Beer::with('pubs')
 						->leftJoin('user_beers','user_beers.beer_id', 'beers.id')
 						->where('user_beers.user_id', $usuario->id)
-						->orWhereNull('user_beers.beer_id')
 						->select('beers.id AS id', 'beers.titulo', 'beers.graduacion','beers.tipo', 'beers.imagen'
 						, 'beers.imagen2', 'beers.descripcion', 'user_beers.isFav AS isFav')
 						->get();
