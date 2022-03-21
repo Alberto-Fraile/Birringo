@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Beer;
 use App\Models\Pub;
 use App\Models\Quest;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -15,26 +16,42 @@ class BeerController extends Controller
     public function obtenerCervezas(Request $req){
 
         $respuesta = ["status" => 1, "msg" => ""];
+        $usuario = User::find($req->usuario->id);
         
-        try {
-            //Ver cervezas por titulo o tipo
-            if($req -> has('busqueda')){
-                $beers = Beer::with('pubs')
-               ->where('beers.titulo','like','%'. $req -> input('busqueda').'%')
-               ->orWhere('beers.tipo','like','%'. $req -> input('busqueda').'%')
-               ->get();
-            //Ver todas las cervezas.
-            } else {
-                $beers = Beer::with('pubs')
-                ->get();  
-                //Comentario
-            }
-            $respuesta['msg'] = "Cervezas encontradas";
-            $respuesta['beers'] = $beers;
+        if($usuario){
+            try {
+                //Ver cervezas por titulo o tipo
+                if($req -> has('busqueda')){
 
-        }catch (\Exception $e) {
+                    $beers = Beer::with('pubs')
+                    ->where('beers.titulo','like','%'. $req -> input('busqueda').'%')
+                    ->orWhere('beers.tipo','like','%'. $req -> input('busqueda').'%')
+                    /*->leftJoin('user_beers','user_beers.beer_id', 'beers.id')
+                    ->where('user_beers.user_id', $usuario->id)
+                    ->orWhereNull('user_beers.beer_id')
+                    ->select('beers.id AS id', 'beers.titulo', 'beers.graduacion','beers.tipo', 'beers.imagen'
+                    , 'beers.imagen2', 'beers.descripcion', 'user_beers.isFav')*/
+                    ->get();
+
+                //Ver todas las cervezas.
+                } else {
+                    $beers = Beer::with('pubs')
+                            ->leftJoin('user_beers','user_beers.beer_id', 'beers.id')
+                            ->where('user_beers.user_id', $usuario->id)
+                            ->orWhereNull('user_beers.beer_id')
+                            ->select('beers.id AS id', 'beers.titulo', 'beers.graduacion','beers.tipo', 'beers.imagen'
+                            , 'beers.imagen2', 'beers.descripcion', 'user_beers.isFav')
+                            ->get();
+                }
+                $respuesta['msg'] = "Cervezas encontradas";
+                $respuesta['beers'] = $beers;
+            } catch (\Exception $e) {
+                $respuesta["status"] = 0;
+                $respuesta["msg"] = "Se ha producido un error".$e->getMessage();  
+            }
+        } else {
             $respuesta["status"] = 0;
-            $respuesta["msg"] = "Se ha producido un error".$e->getMessage();  
+            $respuesta["msg"] = "No se ha encontrado el usaurio"; 
         }
         return response()->json($respuesta);
     }

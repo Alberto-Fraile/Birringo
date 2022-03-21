@@ -11,6 +11,14 @@ class Beer extends Model
     protected $table = 'beers';
     public $timestamps = false;
 
+    protected $fillable = [
+        'id',
+        'titulo',
+        'graduacion',
+        'tipo',
+        'descripcion',
+    ];
+
     protected $hidden = [
         'created_at',
         'updated_at',
