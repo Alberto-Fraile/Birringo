@@ -62,7 +62,7 @@ class QuestController extends Controller
                     $questMatch->users()->syncWithoutDetaching($usuario);
                     $usuario->puntos += $datos->puntos;
                     $usuario->save();
-                    $respuesta["msg"] = "Quest completado, se han sumado los puntos al usuario"; 
+                    $respuesta["msg"] = "Quest completado"; 
                 }
 
             } else {
