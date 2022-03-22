@@ -39,4 +39,5 @@ Route::middleware(['login-api-token']) -> prefix('usuarios') -> group(function()
 	Route::post('/editUserData',[UsersController::class,'editUserData']);
 	Route::get('login/google', [LoginGoogleController::class, 'redirect'])->withoutMiddleware(['login-api-token']);
     Route::get('/google/callback', [LoginGoogleController::class, 'callback'])->withoutMiddleware(['login-api-token']);
+	Route::post('/checkQuest',[QuestController::class,'checkQuest']);
 });
