@@ -21,7 +21,6 @@ class BeerController extends Controller
         if($usuario){
             try {
 
-            
                 //Ver cervezas por titulo o tipo
                 if($req -> has('busqueda') && $req -> input('busqueda') != "" ){
 
@@ -54,7 +53,7 @@ class BeerController extends Controller
             }
         } else {
             $respuesta["status"] = 0;
-            $respuesta["msg"] = "No se ha encontrado el usaurio"; 
+            $respuesta["msg"] = "No se ha encontrado el usuario"; 
         }
         return response()->json($respuesta);
     }
