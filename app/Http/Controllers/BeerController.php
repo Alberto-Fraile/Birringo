@@ -84,9 +84,9 @@ class BeerController extends Controller
                 ->where('beers.tipo','like','%'. "IPA".'%')
                 ->get();
            
-            } else if($req -> has('tipo') &&  $req -> input('tipo') == "Rellenar"){
+            } else if($req -> has('tipo') &&  $req -> input('tipo') == "Negra"){
                 $beers = Beer::with('pubs')
-                ->where('beers.tipo','like','%'. "Rellenar".'%')
+                ->where('beers.tipo','like','%'. "Negra".'%')
                 ->get();
            
             } else {
